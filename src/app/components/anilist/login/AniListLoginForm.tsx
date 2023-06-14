@@ -31,12 +31,13 @@ const AniListLoginForm = () => {
                 onChange={handleAuthCode}
                 className="border-solid border-2 border-black rounded-sm mt-2"
             ></textarea>
-            <input
+            <button
                 id="submit_auth"
                 type="submit"
-                value="Authorize"
                 className="border-solid border-2 border-black rounded-sm mt-2 p-2"
-            ></input>
+            >
+                Authorize
+            </button>
         </form>
     )
 }
