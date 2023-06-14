@@ -7,11 +7,14 @@ interface AniListAuthReqBody {
 }
 
 interface AniListAuthResBody {
-    access_token: string,
-    expires_in: number
+    access_token: string
 }
 
-export const POST = async (req: Request) => {
+function validateAuthRequest(body: AniListAuthReqBody): boolean {
+    return true
+}
+
+async function fetchAccessToken(body: AniListAuthReqBody): Promise<AniListAuthResBody> {
     const authUrl = process.env.ANILIST_API_AUTH_URI
     const clientId = process.env.NEXT_PUBLIC_CLIENT_ID
     const clientSecret = process.env.ANILIST_CLIENT_SECRET
@@ -22,9 +25,10 @@ export const POST = async (req: Request) => {
     }
 
     // TODO Add schema for request body
-    const data: AniListAuthReqBody = await req.json();
-
-    console.log(data)
+    console.log(body)
+    if (!validateAuthRequest(body)) {
+        throw new Error("Invalid auth request.")
+    }
 
     const authRes = await fetch(authUrl, {
         method: "POST",
@@ -37,31 +41,48 @@ export const POST = async (req: Request) => {
             "client_id": clientId,
             "client_secret": clientSecret,
             "redirect_uri": redirectUri,
-            "code": data.auth_code
+            "code": body.auth_code
         })
     })
 
     if (authRes.status != 200) {
-        console.error(authRes.status, authRes.statusText)
         const json = await authRes.json()
-        console.error(json)
+
+        console.error({
+            status: authRes.status,
+            statusText: authRes.statusText,
+            json
+        })
+
         throw new Error("Could not authorize with AniList API")
     }
 
     // TODO Add schema for response body
     const json: AniListAuthResBody = await authRes.json()
 
-    console.log(json.access_token, json.expires_in)
+    return json
+}
+
+function setAccessTokenCookie(accessToken: string) {
+    console.log(accessToken)
 
     cookies().set({
         name: "anilist-access-token",
-        value: json.access_token,
+        value: accessToken,
         httpOnly: true,
         sameSite: "strict",
-        // TODO Make expire configurable
+        // TODO Make expires configurable
         expires: add(new Date(), { years: 1 }),
         path: "/"
     })
+}
+
+export async function POST(req: Request) {
+    const body: AniListAuthReqBody = await req.json()
+
+    const authRes: AniListAuthResBody = await fetchAccessToken(body)
+
+    setAccessTokenCookie(authRes.access_token)
 
     return NextResponse.json({
         data: {
