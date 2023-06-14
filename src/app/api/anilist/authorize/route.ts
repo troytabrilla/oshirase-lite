@@ -1,70 +1,74 @@
-import { NextResponse } from "next/server"
-import { cookies } from "next/headers"
-import { add } from "date-fns"
+import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
+import { add } from "date-fns";
 
 interface AniListAuthReqBody {
-    auth_code: string
+    auth_code: string;
 }
 
 interface AniListAuthResBody {
-    access_token: string
+    access_token: string;
 }
 
 function validateAuthRequest(body: AniListAuthReqBody): boolean {
-    return true
+    return true;
 }
 
-async function fetchAccessToken(body: AniListAuthReqBody): Promise<AniListAuthResBody> {
-    const authUrl = process.env.ANILIST_API_AUTH_URI
-    const clientId = process.env.NEXT_PUBLIC_CLIENT_ID
-    const clientSecret = process.env.ANILIST_CLIENT_SECRET
-    const redirectUri = process.env.NEXT_PUBLIC_REDIRECT_URI
+// TODO Refactor this out to a shared lib
+// TODO Update redirect uri in .env with ngrok url
+async function fetchAccessToken(
+    body: AniListAuthReqBody
+): Promise<AniListAuthResBody> {
+    const authTokenUri = process.env.ANILIST_API_AUTH_TOKEN_URI;
+    const clientId = process.env.NEXT_PUBLIC_CLIENT_ID;
+    const clientSecret = process.env.ANILIST_CLIENT_SECRET;
+    const redirectUri = process.env.NEXT_PUBLIC_REDIRECT_URI;
 
-    if (!authUrl || !clientId || !clientSecret || !redirectUri) {
-        throw new Error("Could not set up auth request.")
+    if (!authTokenUri || !clientId || !clientSecret || !redirectUri) {
+        throw new Error("Could not set up auth request.");
     }
 
     // TODO Add schema for request body
-    console.log(body)
+    console.log(body);
     if (!validateAuthRequest(body)) {
-        throw new Error("Invalid auth request.")
+        throw new Error("Invalid auth request.");
     }
 
-    const authRes = await fetch(authUrl, {
+    const authRes = await fetch(authTokenUri, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
-            "Accept": "application/json"
+            Accept: "application/json",
         },
         body: JSON.stringify({
-            "grant_type": "authorization_code",
-            "client_id": clientId,
-            "client_secret": clientSecret,
-            "redirect_uri": redirectUri,
-            "code": body.auth_code
-        })
-    })
+            grant_type: "authorization_code",
+            client_id: clientId,
+            client_secret: clientSecret,
+            redirect_uri: redirectUri,
+            code: body.auth_code,
+        }),
+    });
 
     if (authRes.status != 200) {
-        const json = await authRes.json()
+        const json = await authRes.json();
 
         console.error({
             status: authRes.status,
             statusText: authRes.statusText,
-            json
-        })
+            json,
+        });
 
-        throw new Error("Could not authorize with AniList API")
+        throw new Error("Could not authorize with AniList API");
     }
 
     // TODO Add schema for response body
-    const json: AniListAuthResBody = await authRes.json()
+    const json: AniListAuthResBody = await authRes.json();
 
-    return json
+    return json;
 }
 
 function setAccessTokenCookie(accessToken: string) {
-    console.log(accessToken)
+    console.log(accessToken);
 
     cookies().set({
         name: "anilist-access-token",
@@ -73,20 +77,20 @@ function setAccessTokenCookie(accessToken: string) {
         sameSite: "strict",
         // TODO Make expires configurable
         expires: add(new Date(), { years: 1 }),
-        path: "/"
-    })
+        path: "/",
+    });
 }
 
 export async function POST(req: Request) {
-    const body: AniListAuthReqBody = await req.json()
+    const body: AniListAuthReqBody = await req.json();
 
-    const authRes: AniListAuthResBody = await fetchAccessToken(body)
+    const authRes: AniListAuthResBody = await fetchAccessToken(body);
 
-    setAccessTokenCookie(authRes.access_token)
+    setAccessTokenCookie(authRes.access_token);
 
     return NextResponse.json({
         data: {
-            message: "Successfully authorized with AniList API."
-        }
-    })
+            message: "Successfully authorized with AniList API.",
+        },
+    });
 }
