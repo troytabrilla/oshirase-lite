@@ -38,10 +38,10 @@ function validateAuthResponse(body: unknown): AniListAuthResBody {
 export default async function getAniListAccessToken(
     body: unknown
 ): Promise<AniListAuthResBody> {
-    const accessTokenUri = process.env.ANILIST_API_ACCESS_TOKEN_URI
-    const clientId = process.env.NEXT_PUBLIC_CLIENT_ID
-    const clientSecret = process.env.ANILIST_CLIENT_SECRET
-    const redirectUri = process.env.NEXT_PUBLIC_REDIRECT_URI
+    const accessTokenUri = process.env.ANILIST_OAUTH_ACCESS_TOKEN_URI
+    const clientId = process.env.ANILIST_OAUTH_CLIENT_ID
+    const clientSecret = process.env.ANILIST_OAUTH_CLIENT_SECRET
+    const redirectUri = process.env.ANILIST_OAUTH_REDIRECT_URI
 
     if (!accessTokenUri || !clientId || !clientSecret || !redirectUri) {
         throw new Error("Could not set up auth request")

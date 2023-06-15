@@ -16,7 +16,7 @@ export async function GET(req: NextRequest) {
     let sameSite: "lax" | "strict"
 
     if (process.env.NODE_ENV === "development") {
-        url = (process.env.NEXT_PUBLIC_REDIRECT_URI as string).replace(
+        url = (process.env.ANILIST_OAUTH_REDIRECT_URI as string).replace(
             "/anilist/authorize",
             ""
         )

@@ -1,8 +1,8 @@
 import Link from "next/link"
 
 const AniListLoginPage = () => {
-    const clientId = process.env.NEXT_PUBLIC_CLIENT_ID
-    const redirectUri = process.env.NEXT_PUBLIC_REDIRECT_URI
+    const clientId = process.env.ANILIST_OAUTH_CLIENT_ID
+    const redirectUri = process.env.ANILIST_OAUTH_REDIRECT_URI
 
     if (!clientId || !redirectUri) {
         return (
