@@ -7,7 +7,7 @@ const AniListLoginPage = () => {
 
     if (!clientId || !redirectUri) {
         return (
-            <p>
+            <p className="text-2xl">
                 Sorry, something went wrong... Please contact support for help.
             </p>
         )
@@ -18,15 +18,13 @@ const AniListLoginPage = () => {
     )}&response_type=code`
 
     return (
-        <main className="flex min-h-screen flex-col items-center">
-            <p className="text-2xl">
-                Welcome to Nintei. Please{" "}
-                <Link href={authUrl} className="text-blue-500">
-                    log into your AniList account
-                </Link>{" "}
-                to authorize this service.
-            </p>
-        </main>
+        <p className="text-2xl">
+            Welcome to Nintei. Please{" "}
+            <a href={authUrl} className="text-blue-500">
+                log into your AniList account
+            </a>{" "}
+            to authorize this service.
+        </p>
     )
 }
 

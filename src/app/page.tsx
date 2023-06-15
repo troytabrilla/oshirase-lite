@@ -1,8 +1,6 @@
 const HomePage = () => {
     // TODO Add current anime list with latest episodes
-    return (
-        <main className="flex min-h-screen flex-col items-center">Latest</main>
-    )
+    return <p className="text-2xl">Latest</p>
 }
 
 export default HomePage

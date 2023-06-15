@@ -27,6 +27,8 @@ function setupRedirect(req: NextRequest): { url: URL; sameSite: SameSite } {
 }
 
 // TODO Add tests
+// TODO Add unauthorize route
+// TODO Add post route that passes auth response instead of setting a cookie (for non-web ui)
 export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url)
     const code = searchParams.get("code")
