@@ -24,7 +24,24 @@ function validateAuthRequest(body: unknown): AniListAuthReqBody {
     return value as AniListAuthReqBody
 }
 
-function validateAuthResponse(body: unknown): AniListAuthResBody {
+async function validateAuthResponse(
+    res: Response
+): Promise<AniListAuthResBody> {
+    if (res.status != 200) {
+        debug(
+            {
+                status: res.status,
+                statusText: res.statusText,
+                json: await res.json(),
+            },
+            "validateAuthResponse"
+        )
+
+        throw new Error("Could not authorize with AniList API")
+    }
+
+    const body = await res.json()
+
     const { error, value } = responseSchema.validate(body)
 
     if (error) {
@@ -35,6 +52,7 @@ function validateAuthResponse(body: unknown): AniListAuthResBody {
     return value as AniListAuthResBody
 }
 
+// TODO Add tests
 export async function authorize(body: unknown): Promise<AniListAuthResBody> {
     if (
         !process.env.ANILIST_OAUTH_ACCESS_TOKEN_URI ||
@@ -52,7 +70,7 @@ export async function authorize(body: unknown): Promise<AniListAuthResBody> {
 
     const validatedReqBody: AniListAuthReqBody = validateAuthRequest(body)
 
-    const authRes = await fetch(accessTokenUri, {
+    const res = await fetch(accessTokenUri, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -67,18 +85,5 @@ export async function authorize(body: unknown): Promise<AniListAuthResBody> {
         }),
     })
 
-    if (authRes.status != 200) {
-        debug(
-            {
-                status: authRes.status,
-                statusText: authRes.statusText,
-                json: await authRes.json(),
-            },
-            "authorize"
-        )
-
-        throw new Error("Could not authorize with AniList API")
-    }
-
-    return validateAuthResponse(await authRes.json())
+    return validateAuthResponse(res)
 }
