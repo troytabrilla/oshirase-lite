@@ -1,6 +1,6 @@
 import _debug from "debug"
 
-import { requestSchema, responseSchema } from "./auth.schemas"
+import { requestSchema, responseSchema } from "../schemas"
 
 const debug = _debug("nintei/src/lib/models/anilist/anilist-auth")
 
@@ -52,8 +52,9 @@ async function validateAuthResponse(
     return value as AniListAuthResBody
 }
 
-// TODO Add tests
-export async function authorize(body: unknown): Promise<AniListAuthResBody> {
+export default async function getAccessToken(
+    body: unknown
+): Promise<AniListAuthResBody> {
     if (
         !process.env.ANILIST_OAUTH_ACCESS_TOKEN_URI ||
         !process.env.ANILIST_OAUTH_CLIENT_ID ||

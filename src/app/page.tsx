@@ -1,6 +1,7 @@
+import AniListLatestPage from "./components/anilist-latest"
+
 const HomePage = () => {
-    // TODO Add current anime list with latest episodes
-    return <p className="text-2xl">Latest</p>
+    return <AniListLatestPage />
 }
 
 export default HomePage

@@ -1,6 +1,3 @@
-import Link from "next/link"
-
-// TODO Add tests
 const AniListLoginPage = () => {
     const clientId = process.env.ANILIST_OAUTH_CLIENT_ID
     const redirectUri = process.env.ANILIST_OAUTH_REDIRECT_URI
