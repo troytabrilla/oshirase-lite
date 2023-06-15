@@ -18,12 +18,6 @@ interface IViewer {
 export default async function fetchViewer(
     accessToken: string
 ): Promise<IViewer> {
-    const url = process.env.ANILIST_GRAPHQL_API_URI
-
-    if (!url) {
-        throw new Error("Could not find AniList GraphQL API endpoint")
-    }
-
     const data = await callAniListAPI(accessToken, VIEWER_QUERY)
 
     const { value, error } = viewerSchema.validate(data)

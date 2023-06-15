@@ -42,12 +42,6 @@ export default async function fetchList(
     userId: number,
     statusIn: IMediaListStatus[]
 ): Promise<IAnime[]> {
-    const url = process.env.ANILIST_GRAPHQL_API_URI
-
-    if (!url) {
-        throw new Error("Could not find AniList GraphQL API endpoint")
-    }
-
     const data = await callAniListAPI(accessToken, LIST_QUERY, {
         user_id: userId,
         type: "ANIME",
