@@ -15,7 +15,9 @@ const AnimeTable = ({ list }: { list: IAnime[] }) => {
             </thead>
             <tbody>
                 {list.map((anime: IAnime) => {
-                    return <AnimeTableEntry anime={anime} />
+                    return (
+                        <AnimeTableEntry key={anime.media_id} anime={anime} />
+                    )
                 })}
             </tbody>
         </table>
