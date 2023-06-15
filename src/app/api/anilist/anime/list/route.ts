@@ -1,44 +1,10 @@
 import { NextRequest, NextResponse } from "next/server"
 import _debug from "debug"
 
-import fetchViewer from "./lib/fetchViewer"
+import fetchViewer from "./lib/fetch-viewer"
+import fetchList from "./lib/fetch-list"
+import { IMediaListStatus, isMediaListStatus } from "./lib/call-anilist-api"
 
-const debug = _debug("nintei/src/app/api/anilist/anime/list/route")
-
-const listQuery = `query ListQuery(
-    $user_id: Int
-    $type: MediaType
-    $status_in: [MediaListStatus]
-) {
-    MediaListCollection(userId: $user_id, type: $type, status_in: $status_in) {
-        lists {
-            name
-            status
-            entries {
-                media {
-                    id
-                    type
-                    format
-                    season
-                    seasonYear
-                    title {
-                        romaji
-                        english
-                    }
-                    coverImage {
-                        large
-                    }
-                    episodes
-                }
-                status
-                score
-                progress
-            }
-        }
-    }
-}`
-
-// TODO Fetch from anilist graphql api
 export async function GET(req: NextRequest) {
     const accessToken = req.cookies.get("anilist-access-token")
 
@@ -46,9 +12,21 @@ export async function GET(req: NextRequest) {
         throw new Error("No AniList API access token")
     }
 
+    const url = new URL(req.nextUrl.clone())
+    const { searchParams } = url
+    let status = searchParams.get("status")?.toUpperCase()
+    if (!isMediaListStatus(status)) {
+        status = "CURRENT"
+    }
+
     const viewer = await fetchViewer(accessToken.value)
+    const list = await fetchList(accessToken.value, viewer.id, [
+        status as IMediaListStatus,
+    ])
 
-    console.log("viewer?!", viewer)
-
-    return NextResponse.json({})
+    return NextResponse.json({
+        data: {
+            anime_list: list,
+        },
+    })
 }
