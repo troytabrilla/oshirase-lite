@@ -1,19 +1,19 @@
 import _debug from "debug"
 
-import { requestSchema, responseSchema } from "../schemas"
+import { requestSchema, responseSchema } from "../schemas/auth"
 
 const debug = _debug("nintei/src/lib/models/anilist/anilist-auth")
 
-interface AniListAuthReqBody {
+interface IAniListAuthReqBody {
     auth_code: string
 }
 
-interface AniListAuthResBody {
+interface IAniListAuthResBody {
     access_token: string
     expires_in: number
 }
 
-function validateAuthRequest(body: unknown): AniListAuthReqBody {
+function validateAuthRequest(body: unknown): IAniListAuthReqBody {
     const { error, value } = requestSchema.validate(body)
 
     if (error) {
@@ -21,12 +21,12 @@ function validateAuthRequest(body: unknown): AniListAuthReqBody {
         throw new Error("Invalid auth request")
     }
 
-    return value as AniListAuthReqBody
+    return value as IAniListAuthReqBody
 }
 
 async function validateAuthResponse(
     res: Response
-): Promise<AniListAuthResBody> {
+): Promise<IAniListAuthResBody> {
     if (res.status != 200) {
         debug(
             {
@@ -49,12 +49,12 @@ async function validateAuthResponse(
         throw new Error("Invalid auth response")
     }
 
-    return value as AniListAuthResBody
+    return value as IAniListAuthResBody
 }
 
 export default async function getAccessToken(
     body: unknown
-): Promise<AniListAuthResBody> {
+): Promise<IAniListAuthResBody> {
     if (
         !process.env.ANILIST_OAUTH_ACCESS_TOKEN_URI ||
         !process.env.ANILIST_OAUTH_CLIENT_ID ||
@@ -69,7 +69,7 @@ export default async function getAccessToken(
     const clientSecret = process.env.ANILIST_OAUTH_CLIENT_SECRET
     const redirectUri = process.env.ANILIST_OAUTH_REDIRECT_URI
 
-    const validatedReqBody: AniListAuthReqBody = validateAuthRequest(body)
+    const validatedReqBody: IAniListAuthReqBody = validateAuthRequest(body)
 
     const res = await fetch(accessTokenUri, {
         method: "POST",

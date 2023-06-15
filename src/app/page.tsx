@@ -1,4 +1,4 @@
-import AniListLatestPage from "./components/anilist-latest"
+import AniListLatestPage from "./home/components/anilist-latest"
 
 const HomePage = () => {
     return <AniListLatestPage />
