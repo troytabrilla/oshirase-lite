@@ -2,7 +2,9 @@ import _debug from "debug"
 
 import { requestSchema, responseSchema } from "../schemas/auth"
 
-const debug = _debug("nintei/src/lib/models/anilist/anilist-auth")
+const debug = _debug(
+    "nintei/src/app/api/anilist/authorize/lib/get-access-token"
+)
 
 interface IAniListAuthReqBody {
     auth_code: string
@@ -14,7 +16,7 @@ interface IAniListAuthResBody {
 }
 
 function validateAuthRequest(body: unknown): IAniListAuthReqBody {
-    const { error, value } = requestSchema.validate(body)
+    const { value, error } = requestSchema.validate(body)
 
     if (error) {
         debug({ error }, "validateAuthRequest")
@@ -42,7 +44,7 @@ async function validateAuthResponse(
 
     const body = await res.json()
 
-    const { error, value } = responseSchema.validate(body)
+    const { value, error } = responseSchema.validate(body)
 
     if (error) {
         debug({ error }, "validateAuthResponse")
