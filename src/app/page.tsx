@@ -1,7 +1,7 @@
-import AniListLatestPage from "./home/components/anilist-latest"
+import AnimeListPage from "./home/components/anime-list"
 
 const HomePage = () => {
-    return <AniListLatestPage />
+    return <AnimeListPage />
 }
 
 export default HomePage

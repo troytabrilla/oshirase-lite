@@ -1,10 +1,8 @@
 import _debug from "debug"
 
-import callAniListAPI, {
-    IMediaListStatus,
-    IMediaType,
-} from "./call-anilist-api"
+import callAniListAPI from "./call-anilist-api"
 import { listSchema } from "../schemas/anilist"
+import { IAnime, IMediaListStatus } from "@/app/shared/types/anilist"
 
 const debug = _debug("nintei/src/app/api/anilist/anime/list/lib/fetchList")
 
@@ -38,21 +36,6 @@ const LIST_QUERY = `query ListQuery(
         }
     }
 }`
-
-interface IAnime {
-    media_id: number
-    media_type: IMediaType
-    format: string
-    season?: string
-    season_year?: number
-    title: string
-    english_title?: string
-    image?: string
-    episodes?: number
-    status: IMediaListStatus
-    score?: number
-    progress?: number
-}
 
 export default async function fetchList(
     accessToken: string,
@@ -92,7 +75,7 @@ export default async function fetchList(
                 episodes: entry.media.episodes,
                 status: entry.status,
                 score: entry.score,
-                progresss: entry.progress,
+                progress: entry.progress,
             }))
 
             return memo.concat(flattened)

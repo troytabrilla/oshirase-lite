@@ -3,7 +3,7 @@ import _debug from "debug"
 
 import fetchViewer from "./lib/fetch-viewer"
 import fetchList from "./lib/fetch-list"
-import { IMediaListStatus, isMediaListStatus } from "./lib/call-anilist-api"
+import { IMediaListStatus, isMediaListStatus } from "@/app/shared/types/anilist"
 
 export async function GET(req: NextRequest) {
     const accessToken = req.headers.get("anilist-access-token")

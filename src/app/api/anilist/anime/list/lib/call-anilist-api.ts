@@ -1,32 +1,10 @@
 import _debug from "debug"
 
+import { IMediaType, IMediaListStatus } from "@/app/shared/types/anilist"
+
 const debug = _debug(
     "nintei/src/app/api/anilist/anime/list/lib/call-anilist-api"
 )
-
-export type IMediaType = "ANIME" | "MANGA"
-export type IMediaListStatus =
-    | "CURRENT"
-    | "PLANNING"
-    | "COMPLETED"
-    | "DROPPED"
-    | "PAUSED"
-    | "REPEATING"
-
-export function isMediaListStatus(status?: string): status is IMediaListStatus {
-    if (!status) {
-        return false
-    }
-
-    return [
-        "CURRENT",
-        "PLANNING",
-        "COMPLETED",
-        "DROPPED",
-        "PAUSED",
-        "REPEATING",
-    ].includes(status)
-}
 
 interface IListQueryVariables {
     user_id: number
