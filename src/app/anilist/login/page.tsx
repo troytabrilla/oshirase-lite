@@ -1,13 +1,11 @@
+import Whoops from "@/app/shared/components/whoops"
+
 const AniListLoginPage = () => {
     const clientId = process.env.ANILIST_OAUTH_CLIENT_ID
     const redirectUri = process.env.ANILIST_OAUTH_REDIRECT_URI
 
     if (!clientId || !redirectUri) {
-        return (
-            <p className="text-2xl">
-                Sorry, something went wrong... Please contact support for help.
-            </p>
-        )
+        return <Whoops />
     }
 
     const authUrl = `https://anilist.co/api/v2/oauth/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(
