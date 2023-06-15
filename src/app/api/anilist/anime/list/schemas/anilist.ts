@@ -12,7 +12,6 @@ export const viewerSchema = joi.object({
         .required(),
 })
 
-// TODO Harden schema
 const mediaSchema = joi.object({
     id: joi.number().required(),
     type: joi.string().required(),
