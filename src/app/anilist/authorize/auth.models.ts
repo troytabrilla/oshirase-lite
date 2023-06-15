@@ -1,8 +1,8 @@
 import _debug from "debug"
 
-import { requestSchema, responseSchema } from "../schemas/anilist-auth"
+import { requestSchema, responseSchema } from "./auth.schemas"
 
-const debug = _debug("nintei/src/lib/anilist/auth/get-anilist-access-token")
+const debug = _debug("nintei/src/lib/models/anilist/anilist-auth")
 
 interface AniListAuthReqBody {
     auth_code: string
@@ -35,19 +35,21 @@ function validateAuthResponse(body: unknown): AniListAuthResBody {
     return value as AniListAuthResBody
 }
 
-export default async function getAniListAccessToken(
-    body: unknown
-): Promise<AniListAuthResBody> {
+export async function authorize(body: unknown): Promise<AniListAuthResBody> {
+    if (
+        !process.env.ANILIST_OAUTH_ACCESS_TOKEN_URI ||
+        !process.env.ANILIST_OAUTH_CLIENT_ID ||
+        !process.env.ANILIST_OAUTH_CLIENT_SECRET ||
+        !process.env.ANILIST_OAUTH_REDIRECT_URI
+    ) {
+        throw new Error("Could not set up auth request")
+    }
+
     const accessTokenUri = process.env.ANILIST_OAUTH_ACCESS_TOKEN_URI
     const clientId = process.env.ANILIST_OAUTH_CLIENT_ID
     const clientSecret = process.env.ANILIST_OAUTH_CLIENT_SECRET
     const redirectUri = process.env.ANILIST_OAUTH_REDIRECT_URI
 
-    if (!accessTokenUri || !clientId || !clientSecret || !redirectUri) {
-        throw new Error("Could not set up auth request")
-    }
-
-    // TODO Use model for auth?
     const validatedReqBody: AniListAuthReqBody = validateAuthRequest(body)
 
     const authRes = await fetch(accessTokenUri, {
@@ -72,7 +74,7 @@ export default async function getAniListAccessToken(
                 statusText: authRes.statusText,
                 json: await authRes.json(),
             },
-            "getAniListAccessToken"
+            "authorize"
         )
 
         throw new Error("Could not authorize with AniList API")
