@@ -13,8 +13,8 @@ function setupRedirect(req: NextRequest): { url: URL; sameSite: SameSite } {
 
     if (process.env.NODE_ENV === "development") {
         url = (process.env.ANILIST_OAUTH_REDIRECT_URI as string).replace(
-            "/anilist/authorize",
-            ""
+            "/api/anilist/authorize",
+            "/"
         )
         sameSite = "lax"
     } else {
@@ -26,6 +26,7 @@ function setupRedirect(req: NextRequest): { url: URL; sameSite: SameSite } {
     return { url, sameSite }
 }
 
+// TODO Add tests
 export async function GET(req: NextRequest) {
     const { searchParams } = new URL(req.url)
     const code = searchParams.get("code")
