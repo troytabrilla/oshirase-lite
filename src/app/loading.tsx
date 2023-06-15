@@ -1,5 +1,5 @@
 const Loading = () => {
-    return <div>Loading...</div>
+    return <div className="flex flex-col items-center">Loading...</div>
 }
 
 export default Loading
