@@ -3,7 +3,7 @@ import _debug from "debug"
 import { IMediaType, IMediaListStatus } from "@/app/shared/types/anilist"
 
 const debug = _debug(
-    "nintei/src/app/api/anilist/anime/list/lib/call-anilist-api"
+    "oshirase-lite/src/app/api/anilist/anime/list/lib/call-anilist-api"
 )
 
 interface IListQueryVariables {

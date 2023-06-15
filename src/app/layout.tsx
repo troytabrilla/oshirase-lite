@@ -6,8 +6,8 @@ import Header from "./home/components/header"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata = {
-    title: "Nintei",
-    description: "An authorization microservice",
+    title: "Oshirase-lite",
+    description: "A mini version of Oshirase",
 }
 
 export default function RootLayout({

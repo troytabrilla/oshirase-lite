@@ -3,7 +3,9 @@ import _debug from "debug"
 import callAniListAPI from "./call-anilist-api"
 import { viewerSchema } from "../schemas/anilist"
 
-const debug = _debug("nintei/src/app/api/anilist/anime/list/lib/fetchViewer")
+const debug = _debug(
+    "oshirase-lite/src/app/api/anilist/anime/list/lib/fetchViewer"
+)
 
 const VIEWER_QUERY = `query ViewerQuery {
     Viewer {

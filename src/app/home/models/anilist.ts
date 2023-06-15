@@ -4,7 +4,7 @@ import _debug from "debug"
 import { resultSchema } from "../schemas/anilist"
 import { IAnime } from "@/app/shared/types/anilist"
 
-const debug = _debug("nintei/src/app/home/models/anilist")
+const debug = _debug("oshirase-lite/src/app/home/models/anilist")
 
 export async function fetchAnimeList(): Promise<IAnime[]> {
     const domain = process.env.DOMAIN

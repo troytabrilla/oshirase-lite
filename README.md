@@ -1,3 +1,3 @@
-# Nintei
+# Oshirase Lite
 
-An authorization microservice. Used to authorize API calls to AniList and MangaDex.
+A mini version of Oshirase. For a technical interview with Agile Six.

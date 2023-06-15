@@ -4,7 +4,7 @@ import Whoops from "@/app/shared/components/whoops"
 import * as AniListAPI from "../models/anilist"
 import AnimeTable from "./anime-table"
 
-const debug = _debug("nintei/src/app/home/components/anime-list")
+const debug = _debug("oshirase-lite/src/app/home/components/anime-list")
 
 export default async function AnimeListPage() {
     let list

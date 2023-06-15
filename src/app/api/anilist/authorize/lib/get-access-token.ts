@@ -3,7 +3,7 @@ import _debug from "debug"
 import { requestSchema, responseSchema } from "../schemas/auth"
 
 const debug = _debug(
-    "nintei/src/app/api/anilist/authorize/lib/get-access-token"
+    "oshirase-lite/src/app/api/anilist/authorize/lib/get-access-token"
 )
 
 interface IAniListAuthReqBody {

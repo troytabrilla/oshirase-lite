@@ -4,7 +4,9 @@ import callAniListAPI from "./call-anilist-api"
 import { listSchema } from "../schemas/anilist"
 import { IAnime, IMediaListStatus } from "@/app/shared/types/anilist"
 
-const debug = _debug("nintei/src/app/api/anilist/anime/list/lib/fetchList")
+const debug = _debug(
+    "oshirase-lite/src/app/api/anilist/anime/list/lib/fetchList"
+)
 
 const LIST_QUERY = `query ListQuery(
     $user_id: Int
