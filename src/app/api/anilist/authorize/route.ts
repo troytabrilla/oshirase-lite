@@ -3,26 +3,40 @@ import { add } from "date-fns"
 
 import getAccessToken from "./lib/get-access-token"
 import setupRedirect from "./lib/setup-redirect"
+import errorHandler from "../../lib/error-handler"
 
 export async function GET(req: NextRequest) {
-    const { searchParams } = new URL(req.url)
+    try {
+        const { searchParams } = new URL(req.url)
 
-    const { access_token, expires_in } = await getAccessToken({
-        auth_code: searchParams.get("code"),
-    })
+        const { access_token, expires_in } = await getAccessToken({
+            auth_code: searchParams.get("code"),
+        })
 
-    const { url, sameSite } = setupRedirect(req)
+        const { url, sameSite } = setupRedirect(req)
 
-    const res = NextResponse.redirect(url)
+        const res = NextResponse.redirect(url)
 
-    res.cookies.set({
-        name: "anilist-access-token",
-        value: access_token,
-        httpOnly: true,
-        sameSite: sameSite,
-        expires: add(new Date(), { seconds: expires_in }),
-        path: "/",
-    })
+        res.cookies.set({
+            name: "anilist-access-token",
+            value: access_token,
+            httpOnly: true,
+            sameSite: sameSite,
+            expires: add(new Date(), { seconds: expires_in }),
+            path: "/",
+        })
 
-    return res
+        return res
+    } catch (err: unknown) {
+        const { status, message } = errorHandler(err)
+
+        return NextResponse.json(
+            {
+                data: {
+                    message,
+                },
+            },
+            { status }
+        )
+    }
 }

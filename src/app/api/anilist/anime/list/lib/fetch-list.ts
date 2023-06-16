@@ -54,17 +54,16 @@ export default async function fetchList(
         statusIn = [EMediaListStatus.CURRENT]
     }
 
-    const data = await callAniListAPI(accessToken, LIST_QUERY, {
+    const json = await callAniListAPI(accessToken, LIST_QUERY, {
         user_id: userId,
         type: EMediaType.ANIME,
         status_in: statusIn,
     })
 
-    const { value, error } = listSchema.validate(data)
+    const { value, error } = listSchema.validate(json)
 
     if (error) {
-        debug(error)
-        throw new Error("Invalid list")
+        throw error
     }
 
     const list: IAnime[] = value.data.MediaListCollection.lists.reduce(

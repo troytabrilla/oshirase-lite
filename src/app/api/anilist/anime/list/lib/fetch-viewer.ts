@@ -20,13 +20,12 @@ interface IViewer {
 export default async function fetchViewer(
     accessToken: string
 ): Promise<IViewer> {
-    const data = await callAniListAPI(accessToken, VIEWER_QUERY)
+    const json = await callAniListAPI(accessToken, VIEWER_QUERY)
 
-    const { value, error } = viewerSchema.validate(data)
+    const { value, error } = viewerSchema.validate(json)
 
     if (error) {
-        debug(error)
-        throw new Error("Invalid viewer")
+        throw error
     }
 
     return value.data.Viewer as IViewer

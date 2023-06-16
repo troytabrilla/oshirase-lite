@@ -1,10 +1,21 @@
 import { IAnime } from "@/app/shared/types/anilist"
+import Image from "next/image"
 
 const AnimeTableEntry = ({ anime }: { anime: IAnime }) => {
     return (
         <tr key={anime.media_id}>
             <td className="border border-slate-700">
-                <img src={anime.image} alt={anime.title} className="h-32" />
+                {anime.image ? (
+                    <Image
+                        src={anime.image}
+                        alt={anime.title}
+                        height={326}
+                        width={230}
+                        className="h-32 w-auto"
+                    />
+                ) : (
+                    <span />
+                )}
             </td>
             <td className="border border-slate-700">
                 <a

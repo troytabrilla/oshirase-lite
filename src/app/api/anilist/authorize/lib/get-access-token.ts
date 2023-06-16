@@ -20,8 +20,7 @@ function validateAuthRequest(body: unknown): IAniListAuthReqBody {
     const { value, error } = requestSchema.validate(body)
 
     if (error) {
-        debug(error)
-        throw new Error("Invalid auth request")
+        throw error
     }
 
     return value as IAniListAuthReqBody
@@ -36,8 +35,7 @@ function validateAuthResponse(res: AxiosResponse): IAniListAuthResBody {
     const { value, error } = responseSchema.validate(res.data)
 
     if (error) {
-        debug(error)
-        throw new Error("Invalid auth response")
+        throw error
     }
 
     return value as IAniListAuthResBody
@@ -46,34 +44,20 @@ function validateAuthResponse(res: AxiosResponse): IAniListAuthResBody {
 export default async function getAccessToken(
     body: unknown
 ): Promise<IAniListAuthResBody> {
-    if (
-        !process.env.ANILIST_OAUTH_ACCESS_TOKEN_URI ||
-        !process.env.ANILIST_OAUTH_CLIENT_ID ||
-        !process.env.ANILIST_OAUTH_CLIENT_SECRET ||
-        !process.env.ANILIST_OAUTH_REDIRECT_URI
-    ) {
-        throw new Error("Could not set up auth request")
-    }
-
-    const accessTokenUri = process.env.ANILIST_OAUTH_ACCESS_TOKEN_URI
-    const clientId = process.env.ANILIST_OAUTH_CLIENT_ID
-    const clientSecret = process.env.ANILIST_OAUTH_CLIENT_SECRET
-    const redirectUri = process.env.ANILIST_OAUTH_REDIRECT_URI
-
     const validatedReqBody: IAniListAuthReqBody = validateAuthRequest(body)
 
     const res = await axios({
         method: "POST",
-        url: accessTokenUri,
+        url: process.env.ANILIST_OAUTH_ACCESS_TOKEN_URI,
         headers: {
             "Content-Type": "application/json",
             Accept: "application/json",
         },
         data: {
             grant_type: "authorization_code",
-            client_id: clientId,
-            client_secret: clientSecret,
-            redirect_uri: redirectUri,
+            client_id: process.env.ANILIST_OAUTH_CLIENT_ID,
+            client_secret: process.env.ANILIST_OAUTH_CLIENT_SECRET,
+            redirect_uri: process.env.ANILIST_OAUTH_REDIRECT_URI,
             code: validatedReqBody.auth_code,
         },
     })

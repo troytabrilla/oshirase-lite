@@ -1,4 +1,5 @@
 import { expect, test } from "@jest/globals"
+import { AxiosError } from "axios"
 import dotenv from "dotenv"
 import path from "path"
 
@@ -13,13 +14,15 @@ const TEST_USER_ID = parseInt(process.env.TEST_USER_ID as string, 10)
 
 describe("callAniListAPI", () => {
     test("should throw an error for an invalid access token", async () => {
-        await expect(callAniListAPI("invalid", "query")).rejects.toThrow()
+        await expect(callAniListAPI("invalid", "query")).rejects.toThrow(
+            AxiosError
+        )
     })
 
     test("should throw an error for an invalid query", async () => {
         await expect(
             callAniListAPI(TEST_ACCESS_TOKEN, "query")
-        ).rejects.toThrow()
+        ).rejects.toThrow(AxiosError)
     })
 
     test("should return an object for a valid access token and query", async () => {
@@ -29,15 +32,15 @@ describe("callAniListAPI", () => {
                 name
             }
         }`
-        const data: any = await callAniListAPI(TEST_ACCESS_TOKEN, query)
-        expect(data.data.User.id).toEqual(TEST_USER_ID)
+        const json: any = await callAniListAPI(TEST_ACCESS_TOKEN, query)
+        expect(json.data.User.id).toEqual(TEST_USER_ID)
     })
 })
 
 describe("fetchList", () => {
     test("should return an anime list for a valid user", async () => {
-        const data = await fetchList(TEST_ACCESS_TOKEN, TEST_USER_ID)
-        expect(data.length).toBeGreaterThan(0)
+        const json = await fetchList(TEST_ACCESS_TOKEN, TEST_USER_ID)
+        expect(json.length).toBeGreaterThan(0)
     })
 
     test("should throw an error for an invalid user", async () => {
@@ -47,7 +50,7 @@ describe("fetchList", () => {
 
 describe("fetchViewer", () => {
     test("should return a viewer ID for a valid access token", async () => {
-        const data = await fetchViewer(TEST_ACCESS_TOKEN)
-        expect(data.id).toEqual(TEST_USER_ID)
+        const json = await fetchViewer(TEST_ACCESS_TOKEN)
+        expect(json.id).toEqual(TEST_USER_ID)
     })
 })
