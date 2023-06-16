@@ -1,11 +1,9 @@
-import Whoops from "@/app/shared/components/whoops"
-
 const AniListLoginPage = () => {
     const clientId = process.env.ANILIST_OAUTH_CLIENT_ID
     const redirectUri = process.env.ANILIST_OAUTH_REDIRECT_URI
 
     if (!clientId || !redirectUri) {
-        return <Whoops />
+        throw new Error("Could not set up AniList API auth call")
     }
 
     const authUrl = `https://anilist.co/api/v2/oauth/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(

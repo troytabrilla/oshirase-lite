@@ -1,6 +1,5 @@
 import _debug from "debug"
 
-import Whoops from "@/app/shared/components/whoops"
 import AnimeList from "../models/anime-list"
 import AnimeTable from "./anime-table"
 
@@ -13,7 +12,7 @@ export default async function AnimeListPage() {
         await list.fetch()
     } catch (err) {
         debug(err)
-        return <Whoops />
+        throw err
     }
 
     return (
