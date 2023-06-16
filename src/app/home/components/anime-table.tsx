@@ -1,7 +1,8 @@
 import { IAnime } from "@/app/shared/types/anilist"
 import AnimeTableEntry from "./anime-table-entry"
+import AnimeList from "../models/anime-list"
 
-const AnimeTable = ({ list }: { list: IAnime[] }) => {
+const AnimeTable = ({ list }: { list: AnimeList }) => {
     return (
         <table className="border-separate border-spacing-1 border border-slate-500 text-center">
             <thead>

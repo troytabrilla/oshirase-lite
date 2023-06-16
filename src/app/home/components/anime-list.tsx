@@ -1,16 +1,16 @@
 import _debug from "debug"
 
 import Whoops from "@/app/shared/components/whoops"
-import * as AniListAPI from "../models/anilist"
+import AnimeList from "../models/anime-list"
 import AnimeTable from "./anime-table"
 
 const debug = _debug("oshirase-lite/src/app/home/components/anime-list")
 
 export default async function AnimeListPage() {
-    let list
+    let list = new AnimeList()
 
     try {
-        list = await AniListAPI.fetchAnimeList()
+        await list.fetch()
     } catch (err) {
         debug(err)
         return <Whoops />

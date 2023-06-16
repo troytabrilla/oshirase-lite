@@ -2,7 +2,11 @@ import _debug from "debug"
 
 import callAniListAPI from "./call-anilist-api"
 import { listSchema } from "../schemas/anilist"
-import { IAnime, IMediaListStatus } from "@/app/shared/types/anilist"
+import {
+    IAnime,
+    EMediaType,
+    EMediaListStatus,
+} from "@/app/shared/types/anilist"
 
 const debug = _debug(
     "oshirase-lite/src/app/api/anilist/anime/list/lib/fetchList"
@@ -42,11 +46,11 @@ const LIST_QUERY = `query ListQuery(
 export default async function fetchList(
     accessToken: string,
     userId: number,
-    statusIn: IMediaListStatus[]
+    statusIn: EMediaListStatus[]
 ): Promise<IAnime[]> {
     const data = await callAniListAPI(accessToken, LIST_QUERY, {
         user_id: userId,
-        type: "ANIME",
+        type: EMediaType.ANIME,
         status_in: statusIn,
     })
 

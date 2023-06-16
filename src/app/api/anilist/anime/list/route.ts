@@ -3,7 +3,7 @@ import _debug from "debug"
 
 import fetchViewer from "./lib/fetch-viewer"
 import fetchList from "./lib/fetch-list"
-import { IMediaListStatus, isMediaListStatus } from "@/app/shared/types/anilist"
+import { EMediaListStatus } from "@/app/shared/types/anilist"
 
 export async function GET(req: NextRequest) {
     const accessToken = req.headers.get("anilist-access-token")
@@ -15,14 +15,12 @@ export async function GET(req: NextRequest) {
     const url = new URL(req.nextUrl.clone())
     const { searchParams } = url
     let status = searchParams.get("status")?.toUpperCase()
-    if (!isMediaListStatus(status)) {
-        status = "CURRENT"
-    }
+    let mediaListStatus: EMediaListStatus =
+        EMediaListStatus[status as keyof typeof EMediaListStatus] ||
+        EMediaListStatus.CURRENT
 
     const viewer = await fetchViewer(accessToken)
-    const list = await fetchList(accessToken, viewer.id, [
-        status as IMediaListStatus,
-    ])
+    const list = await fetchList(accessToken, viewer.id, [mediaListStatus])
 
     return NextResponse.json({
         data: {

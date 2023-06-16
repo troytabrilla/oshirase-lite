@@ -1,31 +1,20 @@
-export type IMediaType = "ANIME" | "MANGA"
+export enum EMediaType {
+    ANIME = "ANIME",
+    MANGA = "MANGA",
+}
 
-export type IMediaListStatus =
-    | "CURRENT"
-    | "PLANNING"
-    | "COMPLETED"
-    | "DROPPED"
-    | "PAUSED"
-    | "REPEATING"
-
-export function isMediaListStatus(status?: string): status is IMediaListStatus {
-    if (!status) {
-        return false
-    }
-
-    return [
-        "CURRENT",
-        "PLANNING",
-        "COMPLETED",
-        "DROPPED",
-        "PAUSED",
-        "REPEATING",
-    ].includes(status)
+export enum EMediaListStatus {
+    CURRENT = "CURRENT",
+    PLANNING = "PLANNING",
+    COMPLETED = "COMPLETED",
+    DROPPED = "DROPPED",
+    PAUSED = "PAUSED",
+    REPEATING = "REPEATING",
 }
 
 export interface IAnime {
     media_id: number
-    media_type: IMediaType
+    media_type: EMediaType
     format: string
     season?: string
     season_year?: number
@@ -33,7 +22,7 @@ export interface IAnime {
     english_title?: string
     image?: string
     episodes?: number
-    status: IMediaListStatus
+    status: EMediaListStatus
     score?: number
     progress?: number
 }

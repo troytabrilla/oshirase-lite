@@ -1,6 +1,6 @@
 import _debug from "debug"
 
-import { IMediaType, IMediaListStatus } from "@/app/shared/types/anilist"
+import { EMediaType, EMediaListStatus } from "@/app/shared/types/anilist"
 
 const debug = _debug(
     "oshirase-lite/src/app/api/anilist/anime/list/lib/call-anilist-api"
@@ -8,8 +8,8 @@ const debug = _debug(
 
 interface IListQueryVariables {
     user_id: number
-    type: IMediaType
-    status_in: IMediaListStatus[]
+    type: EMediaType
+    status_in: EMediaListStatus[]
 }
 
 export default async function callAniListAPI(

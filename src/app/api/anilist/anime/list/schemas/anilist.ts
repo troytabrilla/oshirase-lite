@@ -12,21 +12,23 @@ export const viewerSchema = joi.object({
         .required(),
 })
 
+const titleSchema = joi.object({
+    romaji: joi.string().required(),
+    english: joi.string(),
+})
+
+const coverImageSchema = joi.object({
+    large: joi.string(),
+})
+
 const mediaSchema = joi.object({
     id: joi.number().required(),
     type: joi.string().required(),
     format: joi.string().required(),
     season: joi.string(),
     seasonYear: joi.number(),
-    title: joi
-        .object({
-            romaji: joi.string().required(),
-            english: joi.string(),
-        })
-        .required(),
-    coverImage: joi.object({
-        large: joi.string(),
-    }),
+    title: titleSchema.required(),
+    coverImage: coverImageSchema,
     episodes: joi.number(),
 })
 
