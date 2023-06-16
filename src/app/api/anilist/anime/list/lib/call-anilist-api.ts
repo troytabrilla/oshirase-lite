@@ -1,3 +1,4 @@
+import axios from "axios"
 import _debug from "debug"
 
 import { EMediaType, EMediaListStatus } from "@/app/shared/types/anilist"
@@ -23,17 +24,18 @@ export default async function callAniListAPI(
         throw new Error("Could not find AniList GraphQL API endpoint")
     }
 
-    const res = await fetch(url, {
+    const res = await axios({
         method: "POST",
+        url: url,
         headers: {
             Authorization: `Bearer ${accessToken}`,
             "Content-Type": "application/json",
             Accept: "application/json",
         },
-        body: JSON.stringify({
+        data: {
             query,
             variables,
-        }),
+        },
     })
 
     if (res.status != 200) {
@@ -41,7 +43,7 @@ export default async function callAniListAPI(
             {
                 status: res.status,
                 statusText: res.statusText,
-                json: await res.json(),
+                json: res.data,
             },
             "callAniListAPI"
         )
@@ -49,5 +51,5 @@ export default async function callAniListAPI(
         throw new Error("Could not call AniList API")
     }
 
-    return await res.json()
+    return res.data
 }

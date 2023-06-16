@@ -1,3 +1,4 @@
+import axios, { AxiosResponse } from "axios"
 import _debug from "debug"
 
 import { requestSchema, responseSchema } from "../schemas/auth"
@@ -26,15 +27,13 @@ function validateAuthRequest(body: unknown): IAniListAuthReqBody {
     return value as IAniListAuthReqBody
 }
 
-async function validateAuthResponse(
-    res: Response
-): Promise<IAniListAuthResBody> {
+function validateAuthResponse(res: AxiosResponse): IAniListAuthResBody {
     if (res.status != 200) {
         debug(
             {
                 status: res.status,
                 statusText: res.statusText,
-                json: await res.json(),
+                json: res.data,
             },
             "validateAuthResponse"
         )
@@ -42,9 +41,7 @@ async function validateAuthResponse(
         throw new Error("Could not authorize with AniList API")
     }
 
-    const body = await res.json()
-
-    const { value, error } = responseSchema.validate(body)
+    const { value, error } = responseSchema.validate(res.data)
 
     if (error) {
         debug({ error }, "validateAuthResponse")
@@ -73,19 +70,20 @@ export default async function getAccessToken(
 
     const validatedReqBody: IAniListAuthReqBody = validateAuthRequest(body)
 
-    const res = await fetch(accessTokenUri, {
+    const res = await axios({
         method: "POST",
+        url: accessTokenUri,
         headers: {
             "Content-Type": "application/json",
             Accept: "application/json",
         },
-        body: JSON.stringify({
+        data: {
             grant_type: "authorization_code",
             client_id: clientId,
             client_secret: clientSecret,
             redirect_uri: redirectUri,
             code: validatedReqBody.auth_code,
-        }),
+        },
     })
 
     return validateAuthResponse(res)
