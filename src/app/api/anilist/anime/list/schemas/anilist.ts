@@ -1,5 +1,13 @@
 import joi from "joi"
 
+import {
+    EMediaType,
+    EMediaFormat,
+    EMediaSeason,
+    EMediaListStatus,
+    enumToStringArray,
+} from "../../../../../shared/types/anilist"
+
 export const viewerSchema = joi.object({
     data: joi
         .object({
@@ -23,9 +31,15 @@ const coverImageSchema = joi.object({
 
 const mediaSchema = joi.object({
     id: joi.number().required(),
-    type: joi.string().required(),
-    format: joi.string().required(),
-    season: joi.string(),
+    type: joi
+        .string()
+        .valid(...enumToStringArray(EMediaType))
+        .required(),
+    format: joi
+        .string()
+        .valid(...enumToStringArray(EMediaFormat))
+        .required(),
+    season: joi.string().valid(...enumToStringArray(EMediaSeason)),
     seasonYear: joi.number(),
     title: titleSchema.required(),
     coverImage: coverImageSchema,
@@ -34,7 +48,10 @@ const mediaSchema = joi.object({
 
 const entrySchema = joi.object({
     media: mediaSchema.required(),
-    status: joi.string().required(),
+    status: joi
+        .string()
+        .valid(...enumToStringArray(EMediaListStatus))
+        .required(),
     score: joi.number(),
     progress: joi.number(),
 })

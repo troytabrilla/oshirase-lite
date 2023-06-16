@@ -3,6 +3,26 @@ export enum EMediaType {
     MANGA = "MANGA",
 }
 
+export enum EMediaFormat {
+    TV = "TV",
+    TV_SHORT = "TV_SHORT",
+    MOVIE = "MOVIE",
+    SPECIAL = "SPECIAL",
+    OVA = "OVA",
+    ONA = "ONA",
+    MUSIC = "MUSIC",
+    MANGA = "MANGA",
+    NOVEL = "NOVEL",
+    ONE_SHOT = "ONE_SHOT",
+}
+
+export enum EMediaSeason {
+    WINTER = "WINTER",
+    SPRING = "SPRING",
+    SUMMER = "SUMMER",
+    FALL = "FALL",
+}
+
 export enum EMediaListStatus {
     CURRENT = "CURRENT",
     PLANNING = "PLANNING",
@@ -15,8 +35,8 @@ export enum EMediaListStatus {
 export interface IAnime {
     media_id: number
     media_type: EMediaType
-    format: string
-    season?: string
+    format: EMediaFormat
+    season?: EMediaSeason
     season_year?: number
     title: string
     english_title?: string
@@ -25,4 +45,12 @@ export interface IAnime {
     status: EMediaListStatus
     score?: number
     progress?: number
+}
+
+export interface LooseObject {
+    [key: string]: any
+}
+
+export function enumToStringArray(e: LooseObject): string[] {
+    return Object.values(e).map((val) => e[val] as string)
 }

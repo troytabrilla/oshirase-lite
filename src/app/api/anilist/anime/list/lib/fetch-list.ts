@@ -5,6 +5,8 @@ import { listSchema } from "../schemas/anilist"
 import {
     IAnime,
     EMediaType,
+    EMediaFormat,
+    EMediaSeason,
     EMediaListStatus,
 } from "@/app/shared/types/anilist"
 
@@ -63,19 +65,26 @@ export default async function fetchList(
 
     const list: IAnime[] = value.data.MediaListCollection.lists.reduce(
         (memo: IAnime[], list: any) => {
-            const flattened = list.entries.map((entry: any) => ({
-                media_id: entry.media.id,
-                media_type: entry.media.type,
-                format: entry.media.format,
-                season: entry.media.season,
-                season_year: entry.media.seasonYear,
-                title: entry.media.title.romaji,
-                english_title: entry.media.title.english,
-                image: entry.media.coverImage?.large,
-                episodes: entry.media.episodes,
-                status: entry.status,
-                score: entry.score,
-                progress: entry.progress,
+            const flattened: IAnime[] = list.entries.map((entry: any) => ({
+                media_id: entry.media.id as number,
+                media_type:
+                    EMediaType[entry.media.type as keyof typeof EMediaType],
+                format: EMediaFormat[
+                    entry.media.format as keyof typeof EMediaFormat
+                ],
+                season: EMediaSeason[
+                    entry.media.season as keyof typeof EMediaSeason
+                ],
+                season_year: entry.media.seasonYear as number,
+                title: entry.media.title.romaji as string,
+                english_title: entry.media.title.english as string | undefined,
+                image: entry.media.coverImage?.large as string | undefined,
+                episodes: entry.media.episodes as number | undefined,
+                status: EMediaListStatus[
+                    entry.status as keyof typeof EMediaListStatus
+                ],
+                score: entry.score as number | undefined,
+                progress: entry.progress as number | undefined,
             }))
 
             return memo.concat(flattened)
