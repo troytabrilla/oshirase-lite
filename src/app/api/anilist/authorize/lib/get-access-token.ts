@@ -20,7 +20,7 @@ function validateAuthRequest(body: unknown): IAniListAuthReqBody {
     const { value, error } = requestSchema.validate(body)
 
     if (error) {
-        debug({ error }, "validateAuthRequest")
+        debug(error)
         throw new Error("Invalid auth request")
     }
 
@@ -29,22 +29,14 @@ function validateAuthRequest(body: unknown): IAniListAuthReqBody {
 
 function validateAuthResponse(res: AxiosResponse): IAniListAuthResBody {
     if (res.status != 200) {
-        debug(
-            {
-                status: res.status,
-                statusText: res.statusText,
-                json: res.data,
-            },
-            "validateAuthResponse"
-        )
-
+        debug(res.data)
         throw new Error("Could not authorize with AniList API")
     }
 
     const { value, error } = responseSchema.validate(res.data)
 
     if (error) {
-        debug({ error }, "validateAuthResponse")
+        debug(error)
         throw new Error("Invalid auth response")
     }
 

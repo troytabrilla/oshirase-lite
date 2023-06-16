@@ -4,7 +4,7 @@ import callAniListAPI from "./call-anilist-api"
 import { viewerSchema } from "../schemas/anilist"
 
 const debug = _debug(
-    "oshirase-lite/src/app/api/anilist/anime/list/lib/fetchViewer"
+    "oshirase-lite/src/app/api/anilist/anime/list/lib/fetch-viewer"
 )
 
 const VIEWER_QUERY = `query ViewerQuery {
@@ -25,7 +25,7 @@ export default async function fetchViewer(
     const { value, error } = viewerSchema.validate(data)
 
     if (error) {
-        debug({ error }, "fetchViewer")
+        debug(error)
         throw new Error("Invalid viewer")
     }
 

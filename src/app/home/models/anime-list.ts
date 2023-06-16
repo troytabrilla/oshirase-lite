@@ -1,4 +1,5 @@
 import { cookies } from "next/headers"
+import axios from "axios"
 import _debug from "debug"
 
 import { resultSchema } from "../schemas/anime-list"
@@ -29,30 +30,22 @@ export default class AnimeList {
             headers["anilist-access-token"] = accessToken.value
         }
 
-        const res = await fetch(`${domain}/api/anilist/anime/list`, {
-            method: "GET",
-            headers: headers,
-        })
-
-        if (res.status != 200) {
-            debug(
-                {
-                    status: res.status,
-                    statusText: res.statusText,
-                    json: await res.json(),
-                },
-                "fetch"
-            )
-
+        let res
+        try {
+            res = await axios({
+                method: "GET",
+                url: `${domain}/api/anilist/anime/list`,
+                headers: headers,
+            })
+        } catch (err) {
+            debug(err)
             throw new Error("Could not call AniList API")
         }
 
-        const data = await res.json()
-
-        const { value, error } = resultSchema.validate(data)
+        const { value, error } = resultSchema.validate(res.data)
 
         if (error) {
-            debug({ error }, "fetch")
+            debug(error)
             throw new Error("Invalid list")
         }
 

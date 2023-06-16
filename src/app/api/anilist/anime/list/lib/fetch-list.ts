@@ -11,7 +11,7 @@ import {
 } from "@/app/shared/types/anilist"
 
 const debug = _debug(
-    "oshirase-lite/src/app/api/anilist/anime/list/lib/fetchList"
+    "oshirase-lite/src/app/api/anilist/anime/list/lib/fetch-list"
 )
 
 const LIST_QUERY = `query ListQuery(
@@ -48,8 +48,12 @@ const LIST_QUERY = `query ListQuery(
 export default async function fetchList(
     accessToken: string,
     userId: number,
-    statusIn: EMediaListStatus[]
+    statusIn?: EMediaListStatus[]
 ): Promise<IAnime[]> {
+    if (!statusIn || statusIn.length === 0) {
+        statusIn = [EMediaListStatus.CURRENT]
+    }
+
     const data = await callAniListAPI(accessToken, LIST_QUERY, {
         user_id: userId,
         type: EMediaType.ANIME,
@@ -59,7 +63,7 @@ export default async function fetchList(
     const { value, error } = listSchema.validate(data)
 
     if (error) {
-        debug({ error }, "fetchList")
+        debug(error)
         throw new Error("Invalid list")
     }
 
