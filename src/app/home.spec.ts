@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test"
 
-import "./shared/test/setup-test-env"
+import "../../test/setup-test-env"
 
 test("should redirect to the AniList login page without access token cookie", async ({
     page,

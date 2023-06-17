@@ -3,8 +3,8 @@ import Image from "next/image"
 
 const AnimeTableEntry = ({ anime }: { anime: IAnime }) => {
     return (
-        <tr key={anime.media_id}>
-            <td className="border border-slate-700">
+        <tr key={anime.media_id} className="anime-table-entry">
+            <td className="anime-table-entry-image border border-slate-700">
                 {anime.image ? (
                     <Image
                         src={anime.image}
@@ -17,7 +17,7 @@ const AnimeTableEntry = ({ anime }: { anime: IAnime }) => {
                     <span />
                 )}
             </td>
-            <td className="border border-slate-700">
+            <td className="anime-table-entry-title border border-slate-700">
                 <a
                     href={`https://anilist.co/anime/${anime.media_id}`}
                     target="_blank"
@@ -26,11 +26,13 @@ const AnimeTableEntry = ({ anime }: { anime: IAnime }) => {
                     {anime.title}
                 </a>
             </td>
-            <td className="border border-slate-700">
+            <td className="anime-table-entry-progress border border-slate-700">
                 {anime.progress} / {anime.episodes}
             </td>
-            <td className="border border-slate-700">{anime.score}</td>
-            <td className="border border-slate-700">
+            <td className="anime-table-entry-score border border-slate-700">
+                {anime.score}
+            </td>
+            <td className="anime-table-entry-season border border-slate-700">
                 {anime.season} {anime.season_year}
             </td>
         </tr>

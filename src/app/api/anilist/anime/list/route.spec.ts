@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test"
 
-import "../../../../shared/test/setup-test-env"
+import "../../../../../../test/setup-test-env"
 
 const TEST_ACCESS_TOKEN = process.env.TEST_ACCESS_TOKEN as string
 

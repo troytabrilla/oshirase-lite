@@ -1,7 +1,7 @@
 import { expect, test } from "@jest/globals"
 import { AxiosError } from "axios"
 
-import "@/app/shared/test/setup-test-env"
+import "../../../../../../../test/setup-test-env"
 
 import callAniListAPI from "./call-anilist-api"
 import fetchList from "./fetch-list"
