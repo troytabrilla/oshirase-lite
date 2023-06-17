@@ -15,12 +15,6 @@ export default class AnimeList {
     }
 
     async fetch() {
-        const domain = process.env.DOMAIN
-
-        if (!domain) {
-            throw new Error("No domain provided")
-        }
-
         const headers: {
             [key: string]: string
         } = {}
@@ -34,7 +28,7 @@ export default class AnimeList {
         try {
             res = await axios({
                 method: "GET",
-                url: `${domain}/api/anilist/anime/list`,
+                url: `${process.env.DOMAIN}/api/anilist/anime/list`,
                 headers: headers,
             })
         } catch (err) {
