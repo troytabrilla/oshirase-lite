@@ -1,8 +1,6 @@
 import { test, expect } from "@playwright/test"
-import dotenv from "dotenv"
-import path from "path"
 
-dotenv.config({ path: path.resolve(process.cwd(), ".env.test.local") })
+import "../../../../shared/test/setup-test-env"
 
 const TEST_ACCESS_TOKEN = process.env.TEST_ACCESS_TOKEN as string
 

@@ -1,17 +1,17 @@
 import { NextRequest, NextResponse } from "next/server"
 
-export function middleware(request: NextRequest) {
-    const authorized = !!request.cookies.get("anilist-access-token")
-    const url = request.nextUrl.clone()
+export function middleware(req: NextRequest) {
+    const authorized = !!req.cookies.get("anilist-access-token")
+    const url = req.nextUrl.clone()
 
     if (!authorized && url.pathname !== "/anilist/login") {
-        const url = request.nextUrl.clone()
+        const url = req.nextUrl.clone()
         url.pathname = "/anilist/login"
         return NextResponse.redirect(url)
     }
 
     if (authorized && url.pathname === "/anilist/login") {
-        const url = request.nextUrl.clone()
+        const url = req.nextUrl.clone()
         url.pathname = "/"
         return NextResponse.redirect(url)
     }

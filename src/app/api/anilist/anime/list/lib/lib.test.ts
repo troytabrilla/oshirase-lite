@@ -1,13 +1,11 @@
 import { expect, test } from "@jest/globals"
 import { AxiosError } from "axios"
-import dotenv from "dotenv"
-import path from "path"
+
+import "@/app/shared/test/setup-test-env"
 
 import callAniListAPI from "./call-anilist-api"
 import fetchList from "./fetch-list"
 import fetchViewer from "./fetch-viewer"
-
-dotenv.config({ path: path.resolve(process.cwd(), ".env.test.local") })
 
 const TEST_ACCESS_TOKEN = process.env.TEST_ACCESS_TOKEN as string
 const TEST_USER_ID = parseInt(process.env.TEST_USER_ID as string, 10)
