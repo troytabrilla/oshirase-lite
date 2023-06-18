@@ -1,7 +1,7 @@
-import { IAnime } from "@/app/shared/types/anilist"
+import { IMedia } from "@/app/shared/types/anilist"
 import Image from "next/image"
 
-const AnimeTableEntry = ({ anime }: { anime: IAnime }) => {
+const AnimeTableEntry = ({ anime }: { anime: IMedia }) => {
     return (
         <tr key={anime.media_id} className="anime-table-entry">
             <td className="anime-table-entry-image border border-slate-700">

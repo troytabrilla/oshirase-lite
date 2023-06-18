@@ -1,8 +1,11 @@
 import { NextRequest, NextResponse } from "next/server"
 
-import fetchViewer from "./lib/fetch-viewer"
-import fetchList from "./lib/fetch-list"
-import { EMediaListStatus } from "@/app/shared/types/anilist"
+import {
+    Viewer,
+    MediaList,
+    IListQueryVariables,
+} from "../../models/anilist-api"
+import { EMediaListStatus, EMediaType } from "@/app/shared/types/anilist"
 import errorHandler from "@/app/api/lib/error-handler"
 
 export async function GET(req: NextRequest) {
@@ -15,19 +18,14 @@ export async function GET(req: NextRequest) {
     }
 
     try {
-        const url = new URL(req.nextUrl.clone())
-        const { searchParams } = url
-        let status = searchParams.get("status")?.toUpperCase()
-        let mediaListStatus: EMediaListStatus =
-            EMediaListStatus[status as keyof typeof EMediaListStatus] ||
-            EMediaListStatus.CURRENT
+        const variables = await getQueryVariables(req, accessToken)
 
-        const viewer = await fetchViewer(accessToken)
-        const list = await fetchList(accessToken, viewer.id, [mediaListStatus])
+        const list = new MediaList(accessToken)
+        await list.fetch(variables)
 
         return NextResponse.json({
             data: {
-                anime_list: list,
+                anime_list: list.serialize(),
             },
         })
     } catch (err: unknown) {
@@ -41,4 +39,42 @@ export async function GET(req: NextRequest) {
             { status }
         )
     }
+}
+
+async function getQueryVariables(
+    req: NextRequest,
+    accessToken: string
+): Promise<IListQueryVariables> {
+    const userId = await getUserId(accessToken)
+    const mediaType = EMediaType.ANIME
+    const statusIn = getStatusIn(req)
+
+    return {
+        userId,
+        mediaType,
+        statusIn,
+    }
+}
+
+async function getUserId(accessToken: string): Promise<number> {
+    const viewer = new Viewer(accessToken)
+    await viewer.fetch()
+
+    const viewerId = viewer.serialize()?.id
+    if (!viewerId) {
+        throw new Error("No viewer ID")
+    }
+
+    return viewerId
+}
+
+function getStatusIn(req: NextRequest): EMediaListStatus[] {
+    const url = new URL(req.nextUrl.clone())
+    const { searchParams } = url
+    let status = searchParams.get("status")?.toUpperCase()
+    let mediaListStatus: EMediaListStatus =
+        EMediaListStatus[status as keyof typeof EMediaListStatus] ||
+        EMediaListStatus.CURRENT
+
+    return [mediaListStatus]
 }

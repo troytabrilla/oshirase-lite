@@ -6,7 +6,7 @@ import {
     EMediaSeason,
     EMediaListStatus,
     enumToStringArray,
-} from "../../../../../shared/types/anilist"
+} from "../../../shared/types/anilist"
 
 export const viewerSchema = joi.object({
     data: joi

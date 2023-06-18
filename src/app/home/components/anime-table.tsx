@@ -1,4 +1,4 @@
-import { IAnime } from "@/app/shared/types/anilist"
+import { IMedia } from "@/app/shared/types/anilist"
 import AnimeTableEntry from "./anime-table-entry"
 import AnimeList from "../models/anime-list"
 
@@ -15,7 +15,7 @@ const AnimeTable = ({ list }: { list: AnimeList }) => {
                 </tr>
             </thead>
             <tbody>
-                {list.map((anime: IAnime) => {
+                {list.map((anime: IMedia) => {
                     return (
                         <AnimeTableEntry key={anime.media_id} anime={anime} />
                     )

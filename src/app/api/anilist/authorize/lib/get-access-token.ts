@@ -16,6 +16,30 @@ interface IAniListAuthResBody {
     expires_in: number
 }
 
+export default async function getAccessToken(
+    body: unknown
+): Promise<IAniListAuthResBody> {
+    const validatedReqBody: IAniListAuthReqBody = validateAuthRequest(body)
+
+    const res = await axios({
+        method: "POST",
+        url: process.env.ANILIST_OAUTH_ACCESS_TOKEN_URI,
+        headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+        },
+        data: {
+            grant_type: "authorization_code",
+            client_id: process.env.ANILIST_OAUTH_CLIENT_ID,
+            client_secret: process.env.ANILIST_OAUTH_CLIENT_SECRET,
+            redirect_uri: process.env.ANILIST_OAUTH_REDIRECT_URI,
+            code: validatedReqBody.auth_code,
+        },
+    })
+
+    return validateAuthResponse(res)
+}
+
 function validateAuthRequest(body: unknown): IAniListAuthReqBody {
     const { value, error } = requestSchema.validate(body)
 
@@ -39,28 +63,4 @@ function validateAuthResponse(res: AxiosResponse): IAniListAuthResBody {
     }
 
     return value as IAniListAuthResBody
-}
-
-export default async function getAccessToken(
-    body: unknown
-): Promise<IAniListAuthResBody> {
-    const validatedReqBody: IAniListAuthReqBody = validateAuthRequest(body)
-
-    const res = await axios({
-        method: "POST",
-        url: process.env.ANILIST_OAUTH_ACCESS_TOKEN_URI,
-        headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-        },
-        data: {
-            grant_type: "authorization_code",
-            client_id: process.env.ANILIST_OAUTH_CLIENT_ID,
-            client_secret: process.env.ANILIST_OAUTH_CLIENT_SECRET,
-            redirect_uri: process.env.ANILIST_OAUTH_REDIRECT_URI,
-            code: validatedReqBody.auth_code,
-        },
-    })
-
-    return validateAuthResponse(res)
 }

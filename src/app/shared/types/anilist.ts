@@ -1,3 +1,18 @@
+export interface IMedia {
+    media_id: number
+    media_type: EMediaType
+    format: EMediaFormat
+    season?: EMediaSeason
+    season_year?: number
+    title: string
+    english_title?: string
+    image?: string
+    episodes?: number
+    status: EMediaListStatus
+    score?: number
+    progress?: number
+}
+
 export enum EMediaType {
     ANIME = "ANIME",
     MANGA = "MANGA",
@@ -30,21 +45,6 @@ export enum EMediaListStatus {
     DROPPED = "DROPPED",
     PAUSED = "PAUSED",
     REPEATING = "REPEATING",
-}
-
-export interface IAnime {
-    media_id: number
-    media_type: EMediaType
-    format: EMediaFormat
-    season?: EMediaSeason
-    season_year?: number
-    title: string
-    english_title?: string
-    image?: string
-    episodes?: number
-    status: EMediaListStatus
-    score?: number
-    progress?: number
 }
 
 export interface LooseObject {
