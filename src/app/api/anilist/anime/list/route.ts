@@ -63,7 +63,7 @@ const getStatusIn = (req: NextRequest): EMediaListStatus[] => {
     const { searchParams } = url
     let status = searchParams.get("status")?.toUpperCase()
     let mediaListStatus: EMediaListStatus =
-        EMediaListStatus[status as keyof typeof EMediaListStatus] ||
+        EMediaListStatus[status as keyof typeof EMediaListStatus] ??
         EMediaListStatus.CURRENT
 
     return [mediaListStatus]

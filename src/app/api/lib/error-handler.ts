@@ -40,10 +40,10 @@ const respond = (status: number, message: string): NextResponse<IResponse> => {
 const axiosErrorHandler = (
     err: AxiosError<any, any>
 ): NextResponse<IResponse> => {
-    const status = err.response?.status || 500
+    const status = err.response?.status ?? 500
     const errors = err.response?.data?.errors
 
-    let message = err.message || "Could not make request to external service"
+    let message = err.message ?? "Could not make request to external service"
     if (errors?.length > 0) {
         debug(errors)
 
