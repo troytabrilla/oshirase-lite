@@ -26,7 +26,7 @@ test("should return 400 for invalid access token", async ({ request }) => {
     expect(res.status()).toEqual(400)
 
     const json = await res.json()
-    expect(json.data.message).toEqual("Request failed with status code 400")
+    expect(json.data.message).toEqual("Invalid token")
 })
 
 test("should return 200 for valid access token", async ({ request }) => {

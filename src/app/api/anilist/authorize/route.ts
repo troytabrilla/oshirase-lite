@@ -28,15 +28,6 @@ export async function GET(req: NextRequest) {
 
         return res
     } catch (err: any) {
-        const { status, message } = errorHandler(err)
-
-        return NextResponse.json(
-            {
-                data: {
-                    message,
-                },
-            },
-            { status }
-        )
+        return errorHandler(err)
     }
 }

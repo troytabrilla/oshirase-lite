@@ -1,3 +1,4 @@
+import { NextResponse } from "next/server"
 import { AxiosError } from "axios"
 import { ValidationError } from "joi"
 import _debug from "debug"
@@ -5,32 +6,59 @@ import { CustomError } from "@/app/api/lib/errors"
 
 const debug = _debug("oshirase-lite/src/app/api/lib/error-handler")
 
-export default function errorHandler(err: Error): {
-    status: number
-    message: string
-} {
+interface IResponse {
+    data: {
+        message: string
+    }
+}
+
+export default function errorHandler(err: Error): NextResponse<IResponse> {
     debug(err)
 
     if (err instanceof CustomError) {
-        return { status: err.status, message: err.message }
+        return NextResponse.json(
+            { data: { message: err.message } },
+            { status: err.status }
+        )
     }
 
     if (err instanceof AxiosError) {
-        const status = err.response?.status
-        const message = err.message
+        const status = err.response?.status || 500
+        const errors = err.response?.data?.errors
+
+        let message =
+            err.message || "Could not make request to external service"
+        if (errors?.length > 0) {
+            debug(errors)
+
+            if (errors[0]?.message) {
+                message = errors[0].message
+            }
+        }
 
         if (status && message) {
-            return { status, message }
+            return NextResponse.json({ data: { message } }, { status })
         }
     }
 
     if (err instanceof ValidationError) {
-        return { status: 500, message: "Invalid response from external API." }
+        return NextResponse.json(
+            {
+                data: {
+                    message: "Invalid response from external service",
+                },
+            },
+            { status: 500 }
+        )
     }
 
-    return {
-        status: 500,
-        message:
-            "Whoops, something went wrong... Please contact support for help.",
-    }
+    return NextResponse.json(
+        {
+            data: {
+                message:
+                    "Whoops, something went wrong... Please contact support for help",
+            },
+        },
+        { status: 500 }
+    )
 }
