@@ -1,14 +1,19 @@
 import { AxiosError } from "axios"
 import { ValidationError } from "joi"
 import _debug from "debug"
+import { CustomError } from "@/app/api/lib/errors"
 
 const debug = _debug("oshirase-lite/src/app/api/lib/error-handler")
 
-export default function errorHandler(err: unknown): {
+export default function errorHandler(err: Error): {
     status: number
     message: string
 } {
     debug(err)
+
+    if (err instanceof CustomError) {
+        return { status: err.status, message: err.message }
+    }
 
     if (err instanceof AxiosError) {
         const status = err.response?.status

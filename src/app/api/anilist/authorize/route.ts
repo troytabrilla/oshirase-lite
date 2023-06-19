@@ -27,7 +27,7 @@ export async function GET(req: NextRequest) {
         })
 
         return res
-    } catch (err: unknown) {
+    } catch (err: any) {
         const { status, message } = errorHandler(err)
 
         return NextResponse.json(

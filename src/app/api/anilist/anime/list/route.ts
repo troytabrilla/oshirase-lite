@@ -6,18 +6,16 @@ import {
     IListQueryVariables,
 } from "../../models/anilist-api"
 import { EMediaListStatus, EMediaType } from "@/app/shared/types/anilist"
+import { BadRequest } from "@/app/api/lib/errors"
 import errorHandler from "@/app/api/lib/error-handler"
 
 export async function GET(req: NextRequest) {
-    const accessToken = req.headers.get("anilist-access-token")
-    if (!accessToken) {
-        return NextResponse.json(
-            { data: { message: "No AniList API access token provided" } },
-            { status: 400 }
-        )
-    }
-
     try {
+        const accessToken = req.headers.get("anilist-access-token")
+        if (!accessToken) {
+            throw new BadRequest("No AniList API access token provided")
+        }
+
         const variables = await getQueryVariables(req, accessToken)
 
         const list = new MediaList(accessToken)
@@ -28,7 +26,7 @@ export async function GET(req: NextRequest) {
                 anime_list: list.serialize(),
             },
         })
-    } catch (err: unknown) {
+    } catch (err: any) {
         const { status, message } = errorHandler(err)
         return NextResponse.json(
             {
