@@ -12,53 +12,50 @@ interface IResponse {
     }
 }
 
-export default function errorHandler(err: Error): NextResponse<IResponse> {
+const errorHandler = function (err: Error): NextResponse<IResponse> {
     debug(err)
 
     if (err instanceof CustomError) {
-        return NextResponse.json(
-            { data: { message: err.message } },
-            { status: err.status }
-        )
+        return respond(err.status, err.message)
     }
 
     if (err instanceof AxiosError) {
-        const status = err.response?.status || 500
-        const errors = err.response?.data?.errors
-
-        let message =
-            err.message || "Could not make request to external service"
-        if (errors?.length > 0) {
-            debug(errors)
-
-            if (errors[0]?.message) {
-                message = errors[0].message
-            }
-        }
-
-        if (status && message) {
-            return NextResponse.json({ data: { message } }, { status })
-        }
+        return axiosErrorHandler(err)
     }
 
     if (err instanceof ValidationError) {
-        return NextResponse.json(
-            {
-                data: {
-                    message: "Invalid response from external service",
-                },
-            },
-            { status: 500 }
-        )
+        return respond(500, "Invalid response from external service")
     }
 
-    return NextResponse.json(
-        {
-            data: {
-                message:
-                    "Whoops, something went wrong... Please contact support for help",
-            },
-        },
-        { status: 500 }
+    return respond(
+        500,
+        "Whoops, something went wrong... Please contact support for help"
     )
 }
+
+const respond = function (
+    status: number,
+    message: string
+): NextResponse<IResponse> {
+    return NextResponse.json({ data: { message } }, { status })
+}
+
+const axiosErrorHandler = function (
+    err: AxiosError<any, any>
+): NextResponse<IResponse> {
+    const status = err.response?.status || 500
+    const errors = err.response?.data?.errors
+
+    let message = err.message || "Could not make request to external service"
+    if (errors?.length > 0) {
+        debug(errors)
+
+        if (errors[0]?.message) {
+            message = errors[0].message
+        }
+    }
+
+    return respond(status, message)
+}
+
+export default errorHandler

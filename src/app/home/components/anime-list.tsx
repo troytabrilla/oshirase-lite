@@ -1,7 +1,7 @@
 import AnimeList from "../models/anime-list"
 import AnimeTable from "./anime-table"
 
-export default async function AnimeListPage() {
+const AnimeListPage = async function () {
     let list = new AnimeList()
 
     try {
@@ -12,3 +12,5 @@ export default async function AnimeListPage() {
 
     return <AnimeTable list={list} />
 }
+
+export default AnimeListPage

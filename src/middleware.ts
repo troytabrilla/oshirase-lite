@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 
-export function middleware(req: NextRequest) {
+export const middleware = function (req: NextRequest) {
     const authorized = !!req.cookies.get("anilist-access-token")
     const url = req.nextUrl.clone()
 

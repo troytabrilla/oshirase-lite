@@ -5,7 +5,7 @@ import _debug from "debug"
 
 const debug = _debug("oshirase-lite/src/app/error")
 
-export default function GlobalError({ error }: { error: Error }) {
+const GlobalError = function ({ error }: { error: Error }) {
     useEffect(() => {
         debug(error)
     }, [error])
@@ -17,3 +17,5 @@ export default function GlobalError({ error }: { error: Error }) {
         </p>
     )
 }
+
+export default GlobalError

@@ -9,7 +9,7 @@ import { EMediaListStatus, EMediaType } from "@/app/shared/types/anilist"
 import { BadRequest } from "@/app/api/lib/errors"
 import errorHandler from "@/app/api/lib/error-handler"
 
-export async function GET(req: NextRequest) {
+export const GET = async function (req: NextRequest) {
     try {
         const accessToken = req.headers.get("anilist-access-token")
         if (!accessToken) {
@@ -31,7 +31,7 @@ export async function GET(req: NextRequest) {
     }
 }
 
-async function getQueryVariables(
+const getQueryVariables = async function (
     req: NextRequest,
     accessToken: string
 ): Promise<IListQueryVariables> {
@@ -46,7 +46,7 @@ async function getQueryVariables(
     }
 }
 
-async function getUserId(accessToken: string): Promise<number> {
+const getUserId = async function (accessToken: string): Promise<number> {
     const viewer = new Viewer(accessToken)
     await viewer.fetch()
 
@@ -58,7 +58,7 @@ async function getUserId(accessToken: string): Promise<number> {
     return viewerId
 }
 
-function getStatusIn(req: NextRequest): EMediaListStatus[] {
+const getStatusIn = function (req: NextRequest): EMediaListStatus[] {
     const url = new URL(req.nextUrl.clone())
     const { searchParams } = url
     let status = searchParams.get("status")?.toUpperCase()

@@ -4,7 +4,7 @@ import { NextRequest } from "next/server"
 type URL = string | NextURL
 type SameSite = boolean | "lax" | "strict" | "none" | undefined
 
-export default function setupRedirect(req: NextRequest): {
+const setupRedirect = function (req: NextRequest): {
     url: URL
     sameSite: SameSite
 } {
@@ -25,3 +25,5 @@ export default function setupRedirect(req: NextRequest): {
 
     return { url, sameSite }
 }
+
+export default setupRedirect

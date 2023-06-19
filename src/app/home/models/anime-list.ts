@@ -10,7 +10,7 @@ interface IAPIResponse {
     }
 }
 
-export default class AnimeList {
+class AnimeList {
     _animeList: IMedia[]
 
     constructor() {
@@ -56,3 +56,5 @@ export default class AnimeList {
         return this._animeList.map(cb)
     }
 }
+
+export default AnimeList
