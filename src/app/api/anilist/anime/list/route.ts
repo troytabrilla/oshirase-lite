@@ -5,11 +5,7 @@ import {
     MediaList,
     IListQueryVariables,
 } from "../../models/anilist-api"
-import {
-    IMedia,
-    EMediaListStatus,
-    EMediaType,
-} from "@/app/shared/types/anilist"
+import { EMediaListStatus, EMediaType } from "@/app/shared/types/anilist"
 import { BadRequest } from "@/app/api/lib/errors"
 import errorHandler from "@/app/api/lib/error-handler"
 
