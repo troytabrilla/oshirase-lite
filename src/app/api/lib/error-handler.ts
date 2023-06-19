@@ -12,7 +12,7 @@ interface IResponse {
     }
 }
 
-const errorHandler = function (err: Error): NextResponse<IResponse> {
+const errorHandler = (err: Error): NextResponse<IResponse> => {
     debug(err)
 
     if (err instanceof CustomError) {
@@ -33,16 +33,13 @@ const errorHandler = function (err: Error): NextResponse<IResponse> {
     )
 }
 
-const respond = function (
-    status: number,
-    message: string
-): NextResponse<IResponse> {
+const respond = (status: number, message: string): NextResponse<IResponse> => {
     return NextResponse.json({ data: { message } }, { status })
 }
 
-const axiosErrorHandler = function (
+const axiosErrorHandler = (
     err: AxiosError<any, any>
-): NextResponse<IResponse> {
+): NextResponse<IResponse> => {
     const status = err.response?.status || 500
     const errors = err.response?.data?.errors
 

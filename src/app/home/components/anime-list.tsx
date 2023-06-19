@@ -1,7 +1,7 @@
 import AnimeList from "../models/anime-list"
 import AnimeTable from "./anime-table"
 
-const AnimeListPage = async function () {
+const AnimeListPage = async () => {
     let list = new AnimeList()
 
     try {

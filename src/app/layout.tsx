@@ -10,7 +10,11 @@ export const metadata = {
     description: "A mini version of Oshirase",
 }
 
-const RootLayout = function ({ children }: { children: React.ReactNode }) {
+const RootLayout = ({
+    children,
+}: {
+    children: React.ReactNode
+}): React.ReactNode => {
     return (
         <html lang="en">
             <body className={inter.className}>

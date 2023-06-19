@@ -5,7 +5,7 @@ import _debug from "debug"
 
 const debug = _debug("oshirase-lite/src/app/error")
 
-const GlobalError = function ({ error }: { error: Error }) {
+const GlobalError = ({ error }: { error: Error }): React.ReactNode => {
     useEffect(() => {
         debug(error)
     }, [error])

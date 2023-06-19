@@ -5,7 +5,7 @@ import getAccessToken from "./lib/get-access-token"
 import setupRedirect from "./lib/setup-redirect"
 import errorHandler from "../../lib/error-handler"
 
-export const GET = async function (req: NextRequest) {
+export const GET = async (req: NextRequest): Promise<NextResponse> => {
     try {
         const { searchParams } = new URL(req.url)
 

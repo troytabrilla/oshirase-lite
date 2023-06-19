@@ -5,11 +5,15 @@ import {
     MediaList,
     IListQueryVariables,
 } from "../../models/anilist-api"
-import { EMediaListStatus, EMediaType } from "@/app/shared/types/anilist"
+import {
+    IMedia,
+    EMediaListStatus,
+    EMediaType,
+} from "@/app/shared/types/anilist"
 import { BadRequest } from "@/app/api/lib/errors"
 import errorHandler from "@/app/api/lib/error-handler"
 
-export const GET = async function (req: NextRequest) {
+export const GET = async (req: NextRequest): Promise<NextResponse> => {
     try {
         const accessToken = req.headers.get("anilist-access-token")
         if (!accessToken) {
@@ -31,10 +35,10 @@ export const GET = async function (req: NextRequest) {
     }
 }
 
-const getQueryVariables = async function (
+const getQueryVariables = async (
     req: NextRequest,
     accessToken: string
-): Promise<IListQueryVariables> {
+): Promise<IListQueryVariables> => {
     const userId = await getUserId(accessToken)
     const mediaType = EMediaType.ANIME
     const statusIn = getStatusIn(req)
@@ -46,7 +50,7 @@ const getQueryVariables = async function (
     }
 }
 
-const getUserId = async function (accessToken: string): Promise<number> {
+const getUserId = async (accessToken: string): Promise<number> => {
     const viewer = new Viewer(accessToken)
     await viewer.fetch()
 
@@ -58,7 +62,7 @@ const getUserId = async function (accessToken: string): Promise<number> {
     return viewerId
 }
 
-const getStatusIn = function (req: NextRequest): EMediaListStatus[] {
+const getStatusIn = (req: NextRequest): EMediaListStatus[] => {
     const url = new URL(req.nextUrl.clone())
     const { searchParams } = url
     let status = searchParams.get("status")?.toUpperCase()

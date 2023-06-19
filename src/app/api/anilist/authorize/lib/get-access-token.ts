@@ -16,9 +16,7 @@ interface IAniListAuthResBody {
     expires_in: number
 }
 
-const getAccessToken = async function (
-    body: unknown
-): Promise<IAniListAuthResBody> {
+const getAccessToken = async (body: unknown): Promise<IAniListAuthResBody> => {
     const validatedReqBody: IAniListAuthReqBody = validateAuthRequest(body)
 
     const res = await axios({
@@ -40,7 +38,7 @@ const getAccessToken = async function (
     return validateAuthResponse(res)
 }
 
-const validateAuthRequest = function (body: unknown): IAniListAuthReqBody {
+const validateAuthRequest = (body: unknown): IAniListAuthReqBody => {
     const { value, error } = requestSchema.validate(body)
 
     if (error) {
@@ -50,9 +48,7 @@ const validateAuthRequest = function (body: unknown): IAniListAuthReqBody {
     return value as IAniListAuthReqBody
 }
 
-const validateAuthResponse = function (
-    res: AxiosResponse
-): IAniListAuthResBody {
+const validateAuthResponse = (res: AxiosResponse): IAniListAuthResBody => {
     if (res.status != 200) {
         debug(res.data)
         throw new Error("Could not authorize with AniList API")

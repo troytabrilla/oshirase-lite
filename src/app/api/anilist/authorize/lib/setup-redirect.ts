@@ -4,10 +4,12 @@ import { NextRequest } from "next/server"
 type URL = string | NextURL
 type SameSite = boolean | "lax" | "strict" | "none" | undefined
 
-const setupRedirect = function (req: NextRequest): {
+const setupRedirect = (
+    req: NextRequest
+): {
     url: URL
     sameSite: SameSite
-} {
+} => {
     let url: URL
     let sameSite: SameSite
 

@@ -51,6 +51,6 @@ export interface LooseObject {
     [key: string]: any
 }
 
-export function enumToStringArray(e: LooseObject): string[] {
+export const enumToStringArray = (e: LooseObject): string[] => {
     return Object.values(e).map((val) => e[val] as string)
 }
