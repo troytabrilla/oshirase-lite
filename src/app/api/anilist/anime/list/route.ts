@@ -16,10 +16,10 @@ export const GET = async (req: NextRequest): Promise<NextResponse> => {
             throw new BadRequest("No AniList API access token provided")
         }
 
-        const variables = await getQueryVariables(req, accessToken)
+        const options = await getOptions(req, accessToken)
 
         const list = new MediaList(accessToken)
-        await list.fetch(variables)
+        await list.fetch(options)
 
         return NextResponse.json({
             data: {
@@ -31,7 +31,7 @@ export const GET = async (req: NextRequest): Promise<NextResponse> => {
     }
 }
 
-const getQueryVariables = async (
+const getOptions = async (
     req: NextRequest,
     accessToken: string
 ): Promise<IListQueryVariables> => {
@@ -40,9 +40,9 @@ const getQueryVariables = async (
     const statusIn = getStatusIn(req)
 
     return {
-        userId,
-        mediaType,
-        statusIn,
+        user_id: userId,
+        type: mediaType,
+        status_in: statusIn,
     }
 }
 

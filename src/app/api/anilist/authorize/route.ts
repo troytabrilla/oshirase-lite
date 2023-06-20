@@ -2,16 +2,21 @@ import { NextRequest, NextResponse } from "next/server"
 import { NextURL } from "next/dist/server/web/next-url"
 import { add } from "date-fns"
 
-import { AniListAuth } from "./models/anilist-auth"
+import { Auth } from "../models/anilist-api"
 import errorHandler from "../../lib/error-handler"
 import { BadRequest } from "../../lib/errors"
 
 export const GET = async (req: NextRequest): Promise<NextResponse> => {
     try {
         const { searchParams } = new URL(req.url)
+        const authCode = searchParams.get("code")
 
-        const auth = new AniListAuth()
-        await auth.fetch({ auth_code: searchParams.get("code") })
+        if (!authCode) {
+            throw new BadRequest("No authorization code provided")
+        }
+
+        const auth = new Auth(authCode)
+        await auth.fetch()
 
         const data = auth.serialize()
 
