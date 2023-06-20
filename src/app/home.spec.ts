@@ -12,6 +12,14 @@ test("should redirect to the AniList login page without access token cookie", as
     )
 })
 
+test("should redirect user to log into AniList", async ({ page }) => {
+    await page.goto("http://localhost:3000//anilist/login")
+    await page.click(".login")
+    await expect(page).toHaveURL(
+        `https://anilist.co/login?apiVersion=v2&client_id=${process.env.ANILIST_OAUTH_CLIENT_ID}&redirect_uri=${process.env.ANILIST_OAUTH_REDIRECT_URI}&response_type=code&`
+    )
+})
+
 test("should show anime list table with access token cookie", async ({
     browser,
 }) => {

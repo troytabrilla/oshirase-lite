@@ -13,7 +13,7 @@ const AniListLoginPage = () => {
     return (
         <p className="text-2xl">
             Welcome to Oshirase-lite. Please{" "}
-            <a href={authUrl} className="text-blue-500">
+            <a href={authUrl} className="login text-blue-500">
                 log into your AniList account
             </a>{" "}
             to authorize this service.
