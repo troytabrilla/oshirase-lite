@@ -35,13 +35,13 @@ export class AniListAuth {
             },
         })
 
-        this.data = this.validateAuthResponse(res.data)
+        this.data = this.validateAuthResponse(res)
     }
 
     validateAuthRequest(body: unknown): IAniListAuthReq {
         const value = this.validate(body, requestSchema)
 
-        return value.data as IAniListAuthReq
+        return value as IAniListAuthReq
     }
 
     validateAuthResponse(res: AxiosResponse): IAniListAuthRes {
@@ -51,10 +51,10 @@ export class AniListAuth {
 
         const value = this.validate(res.data, responseSchema)
 
-        return value.data as IAniListAuthRes
+        return value as IAniListAuthRes
     }
 
-    validate(data: any, schema: joi.Schema): { data: any } {
+    validate(data: any, schema: joi.Schema): any {
         const { value, error } = schema.validate(data)
 
         if (error) {
