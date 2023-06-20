@@ -1,5 +1,7 @@
-import { cookies } from "next/headers"
 import axios from "axios"
+import _debug from "debug"
+
+const logger = _debug("oshirase-lite/src/app/home/models/anime-list")
 
 import { resultSchema } from "../schemas/anime-list"
 import { IMedia, LooseObject } from "@/app/shared/types/anilist"
@@ -31,6 +33,7 @@ class AnimeList {
             const value = this.validate(res.data)
             this.animeList = value.data.anime_list
         } catch (err) {
+            logger(err)
             throw err
         }
     }
