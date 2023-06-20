@@ -8,18 +8,21 @@ import { IMedia } from "@/app/shared/types/anilist"
 test("should fetch throw an error with a missing access token", async () => {
     const list = new AnimeList()
 
-    await expect(list.fetch({})).rejects.toThrow()
+    await expect(list.fetch({})).rejects.toThrow(
+        new Error("No access token provided")
+    )
 })
 
 test("should fetch throw an error with an invalid access token", async () => {
     const list = new AnimeList()
 
-    await expect(list.fetch({ accessToken: "invalid" })).rejects.toThrow()
+    await expect(list.fetch({ accessToken: "invalid" })).rejects.toThrow(
+        new Error("Request failed with status code 400")
+    )
 })
 
 test("should fetch a list of anime with a valid access token", async () => {
     const list = new AnimeList()
-
     await list.fetch({ accessToken: process.env.TEST_ACCESS_TOKEN })
 
     const raw: IMedia[] = list.map((anime) => anime)
@@ -30,7 +33,6 @@ test("should fetch a list of anime with a valid access token", async () => {
 
 test("should map the anime list", async () => {
     const list = new AnimeList()
-
     await list.fetch({ accessToken: process.env.TEST_ACCESS_TOKEN })
 
     const transformed: number[] = list.map((anime) => anime.media_id)
