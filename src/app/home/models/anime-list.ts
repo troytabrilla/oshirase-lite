@@ -11,10 +11,10 @@ interface IAPIResponse {
 }
 
 class AnimeList {
-    _animeList: IMedia[]
+    private animeList: IMedia[]
 
     constructor() {
-        this._animeList = []
+        this.animeList = []
     }
 
     async fetch() {
@@ -25,7 +25,7 @@ class AnimeList {
                 headers: this.getHeaders(),
             })
             const value = this.validate(res.data)
-            this._animeList = value.data.anime_list
+            this.animeList = value.data.anime_list
         } catch (err) {
             throw err
         }
@@ -53,7 +53,7 @@ class AnimeList {
     }
 
     map(cb: (anime: IMedia) => any) {
-        return this._animeList.map(cb)
+        return this.animeList.map(cb)
     }
 }
 
