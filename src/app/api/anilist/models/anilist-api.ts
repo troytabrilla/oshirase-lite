@@ -1,4 +1,5 @@
 import axios from "axios"
+import joi from "joi"
 
 import {
     IMedia,
@@ -22,6 +23,10 @@ abstract class AniListModel<T> {
         this.accessToken = accessToken
     }
 
+    abstract fetch(variables?: LooseObject): Promise<void>
+
+    abstract serialize(): T | null
+
     protected async query(
         query: string,
         variables?: LooseObject
@@ -43,9 +48,15 @@ abstract class AniListModel<T> {
         return res.data
     }
 
-    abstract fetch(variables?: LooseObject): Promise<void>
+    protected validate(data: any, schema: joi.Schema): { data: any } {
+        const { value, error } = schema.validate(data)
 
-    abstract serialize(): T | null
+        if (error) {
+            throw error
+        }
+
+        return value
+    }
 }
 
 export class Viewer extends AniListModel<IViewer> {
@@ -58,11 +69,7 @@ export class Viewer extends AniListModel<IViewer> {
     async fetch(): Promise<void> {
         const json = await this.query(this.viewerQuery)
 
-        const { value, error } = viewerSchema.validate(json)
-
-        if (error) {
-            throw error
-        }
+        const value = this.validate(json, viewerSchema)
 
         this.data = value.data
     }
@@ -127,11 +134,7 @@ export class MediaList extends AniListModel<IMedia[]> {
             status_in: statusIn,
         })
 
-        const { value, error } = listSchema.validate(json)
-
-        if (error) {
-            throw error
-        }
+        const value = this.validate(json, listSchema)
 
         this.data = value.data
     }
