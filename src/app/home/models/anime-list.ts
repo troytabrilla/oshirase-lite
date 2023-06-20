@@ -4,6 +4,10 @@ import axios from "axios"
 import { resultSchema } from "../schemas/anime-list"
 import { IMedia, LooseObject } from "@/app/shared/types/anilist"
 
+interface IOptions {
+    accessToken?: string
+}
+
 interface IAPIResponse {
     data: {
         anime_list: IMedia[]
@@ -17,12 +21,12 @@ class AnimeList {
         this.animeList = []
     }
 
-    async fetch() {
+    async fetch(options: IOptions) {
         try {
             let res = await axios({
                 method: "GET",
                 url: `${process.env.DOMAIN}/api/anilist/anime/list`,
-                headers: this.getHeaders(),
+                headers: this.buildHeaders(options.accessToken),
             })
             const value = this.validate(res.data)
             this.animeList = value.data.anime_list
@@ -31,18 +35,17 @@ class AnimeList {
         }
     }
 
-    getHeaders(): LooseObject {
+    private buildHeaders(accessToken?: string): LooseObject {
         const headers: LooseObject = {}
 
-        const accessToken = cookies().get("anilist-access-token")
         if (accessToken) {
-            headers["anilist-access-token"] = accessToken.value
+            headers["anilist-access-token"] = accessToken
         }
 
         return headers
     }
 
-    validate(data: any): IAPIResponse {
+    private validate(data: any): IAPIResponse {
         const { value, error } = resultSchema.validate(data)
 
         if (error) {
